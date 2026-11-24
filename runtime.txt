@@ -1,0 +1,2 @@
+# Python runtime version برای پلتفرم‌هایی که این فایل را می‌خوانند
+python-3.12.0

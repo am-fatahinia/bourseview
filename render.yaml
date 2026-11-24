@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════
+# Render Blueprint — بورس‌ویو
+# ═══════════════════════════════════════════════════════════════
+# این فایل تنظیمات دیپلوی روی Render را تعریف می‌کند.
+# پس از push به گیت‌هاب، Render به‌طور خودکار این فایل را می‌خواند.
+# مستندات: https://render.com/docs/blueprint-spec
+# ═══════════════════════════════════════════════════════════════
+
+services:
+  - type: web
+    name: bourseview
+    runtime: python
+    # پلن رایگان — کافی برای استفاده‌ی شخصی و تست
+    # برای استفاده‌ی جدی‌تر می‌توانید به plan: starter ارتقا دهید
+    plan: free
+    #.region: frankfurt        # نزدیک‌ترین به ایران (اگر موجود باشد)
+    #.autoDeploy: true         # دیپلوی خودکار هنگام push
+
+    # دستور شروع: gunicorn برای production
+    # 4 worker برای پردازش موازی درخواست‌ها
+    # timeout 120 برای مقابله با کندی TSETMC
+    # --preload برای اشتراک‌گذاری proactive refresher بین worker‌ها (مهم!)
+    startCommand: gunicorn proxy:app --workers 1 --threads 8 --timeout 120 --preload --bind 0.0.0.0:$PORT
+
+    # متغیرهای محیطی
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      # HOST را روی 0.0.0.0 تنظیم کنید تا از بیرون قابل دسترس باشد
+      - key: HOST
+        value: 0.0.0.0
+      # PORT به‌طور خودکار توسط Render تنظیم می‌شود
+      # غیرفعال‌سازی debug mode در production
+      - key: FLASK_ENV
+        value: production
+      # محدودیت نرخ درخواست به TSETMC (در صورت نیاز به تغییر)
+      # - key: TSETMC_CACHE_TTL
+      #   value: 30
+
+    # بررسی سلامت (Health Check)
+    # Render این آدرس را چک می‌کند تا مطمئن شود برنامه بالا است
+    healthCheckPath: /api/health
+    healthCheckInitialTimeout: 60
+
+# نکته: برای دامنه‌ی اختصاصی، پس از دیپلوی اولیه:
+# 1. به Settings → Custom Domains بروید
+# 2. دامنه‌ی خود را اضافه کنید (مثل bourseview.example.com)
+# 3. رکورد DNS را طبق دستورالعمل Render تنظیم کنید
+# 4. Render به‌طور خودکار HTTPS/SSL را فعال می‌کند

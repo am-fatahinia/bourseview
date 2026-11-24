@@ -1,0 +1,59 @@
+# ═══════════════════════════════════════════════════════════════
+# .gitignore — بورس‌ویو
+# ═══════════════════════════════════════════════════════════════
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+ENV/
+
+# Virtual environments
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.tar.gz
+*.zip
+
+# Render/Heroku
+.render/
+.heroku/
+
+# Don't ignore these important files
+!render.yaml
+!Procfile
+!runtime.txt
+!requirements.txt
